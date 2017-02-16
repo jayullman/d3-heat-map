@@ -1,0 +1,4 @@
+/* hide line on yAxis */
+.yAxis .domain {
+  visibility: hidden;
+}

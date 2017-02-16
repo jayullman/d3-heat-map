@@ -1,7 +1,8 @@
 var dataset = [];
 
+var barHeight = 30;
 var svgWidth = getSVGWidth();
-var svgHeight = 500;
+var svgHeight = 440;
 var svgPadding = 40;
 var svgPaddingTop = 20;
 var svgPaddingLeft = 80;
@@ -52,13 +53,22 @@ window.addEventListener('resize', function(event) {
   });
 };   
 
+// this function will return a color based on passed in temp value
+function getColorFromTemp(temp) {
+  var color = "";
+  console.log(temp);
+
+  return color;
+}
+
 function mouseOverHandler(d) {
   d3.select('.tooltip')
     .attr('style', 'left: ' + (d3.event.pageX - (tooltipWidth / 2))
       + 'px; top:  ' + (d3.event.pageY - tooltipHeight - 30) + 'px;' 
       + 'height: ' + tooltipHeight + 'px; width: ' + tooltipWidth + 'px;')
     .classed('show-tooltip', true);
-
+  
+  console.log(d);
   // d3.select(d3.event.target)
   //   .attr('r', circleRadius + 2);
   
@@ -76,7 +86,7 @@ function mouseOverHandler(d) {
 
 
 function createMap() {
-  console.log(dataset);
+  console.log(dataset.monthlyVariance);
 
   // create graph and append to div
   var svg = d3.select('.graph-container').append('svg')
@@ -98,7 +108,7 @@ function createMap() {
   // TODO: create range values dynamically
   var rangeValues = [];
   for (var i = 0; i < MONTHS.length; i++) {
-    rangeValues.push(svgPadding + (i * 30));
+    rangeValues.push(svgPadding + (i * barHeight));
   }
 
   // create y scale
@@ -107,20 +117,24 @@ function createMap() {
     .domain(MONTHS)
     .range(rangeValues);
 
+  
+
     // create data points/append rects to svg
   svg.selectAll('rect')
-    .data(dataset)
+    .data(dataset.monthlyVariance)
     .enter()
     .append('rect')
     .attr('x', function(d) {
-      return xScale((d));
+      return xScale((d.year));
     })
     .attr('y', function(d) {
-      return yScale();
+      return yScale(MONTHS[d.month - 1]);
     })
-    .attr('height', '30px')
+    .attr('height', barHeight)
+    .attr('width', 5)
     // change this to reflect temperature
     .attr('fill', function(d) {
+      getColorFromTemp(d.variance)
       return 'yellow';
     })
 
@@ -157,7 +171,8 @@ function createMap() {
     .attr('transform', 'rotate(-90)');
 
   // create x and y axis
-  var xAxis = d3.axisBottom(xScale);
+  var xAxis = d3.axisBottom(xScale)
+    .tickFormat(d3.format("d"));
   svg.append('g')
   .attr('transform', 'translate(2,' + (svgHeight - svgPadding) + ')')
   .style('font-size', function() {
@@ -171,9 +186,11 @@ function createMap() {
   })
   .call(xAxis);
 
-   var yAxis = d3.axisLeft(yScale);
+   var yAxis = d3.axisLeft(yScale)
+    .tickSize(0);
    svg.append('g')
-    .attr('transform', 'translate(' + svgPaddingLeft + ',0)')
+    .attr('transform', 'translate(' + svgPaddingLeft + ',' + (barHeight / 2) + ')')
+    .classed('yAxis', 'true')
     .call(yAxis);
 
 }
