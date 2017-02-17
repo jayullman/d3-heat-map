@@ -1,15 +1,7 @@
 var dataset = [];
 
-var barHeight = 30;
-var svgWidth = getSVGWidth();
-var svgHeight = 440;
-var svgPadding = 40;
-var svgPaddingTop = 20;
-var svgPaddingLeft = 80;
-var svgPaddingRight = 110;
-var svgPaddingBottom = 40;
-var tooltipHeight = 100;
-var tooltipWidth = 200;
+
+
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -17,7 +9,6 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 axios.get('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/global-temperature.json')
   .then(function (response){
     dataset = response.data;
-    console.log(dataset.monthlyVariance[0].year);
     createMap();
   })
   .catch(function (error) {
@@ -53,40 +44,58 @@ window.addEventListener('resize', function(event) {
   });
 };   
 
-// this function will return a color based on passed in temp value
-function getColorFromTemp(temp) {
-  var color = "";
-  console.log(temp);
-
-  return color;
-}
-
 function mouseOverHandler(d) {
+  var tooltipHeight = 100;
+  var tooltipWidth = 150;
+
   d3.select('.tooltip')
     .attr('style', 'left: ' + (d3.event.pageX - (tooltipWidth / 2))
       + 'px; top:  ' + (d3.event.pageY - tooltipHeight - 30) + 'px;' 
       + 'height: ' + tooltipHeight + 'px; width: ' + tooltipWidth + 'px;')
     .classed('show-tooltip', true);
   
-  console.log(d);
-  // d3.select(d3.event.target)
-  //   .attr('r', circleRadius + 2);
-  
-
   // tooltip info goes here
-  /*
+  
   d3.select('.tooltip-info')
-    .html(d.Name + ': ' + d.Nationality + '<br>' 
-      + 'Year: ' + d.Year + '<br>'
-      + 'Place: ' + d.Place + '<br>'
-      + 'Time: ' + d.Time + '<br><br>'
-      +  (d.Doping ? d.Doping : 'No doping allegations'));
-    */
+    .html(
+      MONTHS[d.month-1] + ', ' + d.year + '<br>' 
+      + 'Temp: ' + (dataset.baseTemperature + d.variance).toFixed(2) + '&deg;C' + '<br>'
+      + 'Variance: ' + d.variance.toFixed(2) + '&deg;C'
+    );
 }
 
+// this function will return a color based on passed in temp value
+function getColorFromTemp(temp, scale) {
+  var color = (d3.interpolateRdYlGn(scale(temp)));
+
+  return color;
+}
+
+function getMinTemp() {
+  return d3.min(dataset.monthlyVariance, function(d) {
+    return d.variance;
+  });
+}
+function getMaxTemp() {
+  return d3.max(dataset.monthlyVariance, function(d) {
+    return d.variance;
+  });
+}
 
 function createMap() {
-  console.log(dataset.monthlyVariance);
+  var barHeight = 30;
+  var svgWidth = getSVGWidth();
+  var svgHeight = 440;
+  var svgPadding = 40;
+  var svgPaddingTop = 20;
+  var svgPaddingLeft = 80;
+  var svgPaddingRight = 110;
+  var svgPaddingBottom = 40;
+
+  // create color scale for use with the d3 chromatic scale plugin
+  var colorScale = d3.scaleLinear()
+  .domain([getMinTemp(), getMaxTemp()])
+  .range([1,0])
 
   // create graph and append to div
   var svg = d3.select('.graph-container').append('svg')
@@ -94,10 +103,6 @@ function createMap() {
   .attr('height', svgHeight)
   .attr('class', 'graph');
 
-  // create x scale
-  // add slight padding to max value
-
-  
   xScale = d3.scaleLinear()
     .domain(
       [dataset.monthlyVariance[0].year, 
@@ -117,8 +122,6 @@ function createMap() {
     .domain(MONTHS)
     .range(rangeValues);
 
-  
-
     // create data points/append rects to svg
   svg.selectAll('rect')
     .data(dataset.monthlyVariance)
@@ -131,16 +134,16 @@ function createMap() {
       return yScale(MONTHS[d.month - 1]);
     })
     .attr('height', barHeight)
-    .attr('width', 5)
+    // make bar widths responsive based on width of screen
+    .attr('width', svgWidth / (dataset.monthlyVariance.length / 20))
     // change this to reflect temperature
     .attr('fill', function(d) {
-      getColorFromTemp(d.variance)
-      return 'yellow';
+      return getColorFromTemp(d.variance, colorScale);
     })
 
     // add mouseover event to each bar
     //.on('mouseenter', mouseOverHandler)
-    //.on('mousemove', mouseOverHandler)
+    .on('mousemove', mouseOverHandler)
     .on('mouseover', mouseOverHandler)
     .on('mouseleave', function() {
       d3.select('.tooltip')
@@ -192,5 +195,21 @@ function createMap() {
     .attr('transform', 'translate(' + svgPaddingLeft + ',' + (barHeight / 2) + ')')
     .classed('yAxis', 'true')
     .call(yAxis);
+}
 
+function createColorLegend() {
+  // get width of legend based on width of window
+  var legendWidth = getSVGWidth() / 3;
+  var legendHeight = 300;
+
+  var svg = d3.select('.legend-container').append('svg')
+  .attr('width', legendWidth)
+  .attr('height', legendHeight)
+  .attr('class', 'legend');
+
+  xScale = d3.scaleLinear()
+    .domain([0,1])
+    .range([0, legendWidth]);
+
+   // d3.interpolateRdYlGn()
 }
