@@ -1,8 +1,5 @@
 var dataset = [];
 
-
-
-
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 // use axios library for ajax request
@@ -16,7 +13,7 @@ axios.get('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/m
   });
 
 function getSVGWidth() {
-  var width = window.innerWidth * .85;
+  var width = window.innerWidth * .9;
   // create max and min-widths
   if (width < 310) {
       width = 310;
@@ -39,13 +36,13 @@ window.addEventListener('resize', function(event) {
     svgWidth = getSVGWidth();
     // remove old chart and legend box on resizing
     d3.select('svg').remove();
-    d3.select('.legend-box').remove();
+    d3.select('.legend').remove();
     createMap();
   });
 };   
 
 function mouseOverHandler(d) {
-  var tooltipHeight = 100;
+  var tooltipHeight = 80;
   var tooltipWidth = 150;
 
   d3.select('.tooltip')
@@ -66,7 +63,7 @@ function mouseOverHandler(d) {
 
 // this function will return a color based on passed in temp value
 function getColorFromTemp(temp, scale) {
-  var color = (d3.interpolateRdYlGn(scale(temp)));
+  var color = (d3.interpolateRdYlBu(scale(temp)));
 
   return color;
 }
@@ -88,8 +85,8 @@ function createMap() {
   var svgHeight = 440;
   var svgPadding = 40;
   var svgPaddingTop = 20;
-  var svgPaddingLeft = 80;
-  var svgPaddingRight = 110;
+  var svgPaddingLeft = 50;
+  var svgPaddingRight = 10;
   var svgPaddingBottom = 40;
 
   // create color scale for use with the d3 chromatic scale plugin
@@ -168,7 +165,7 @@ function createMap() {
   // add y-axis label
   svg.append('text')
     .attr('x', 0 - (svgHeight / 2))
-    .attr('y', (svgPadding - 10))
+    .attr('y', 10)
     .style('text-anchor', 'middle')
     .text('Month')
     .attr('transform', 'rotate(-90)');
@@ -195,21 +192,50 @@ function createMap() {
     .attr('transform', 'translate(' + svgPaddingLeft + ',' + (barHeight / 2) + ')')
     .classed('yAxis', 'true')
     .call(yAxis);
+
+  createColorLegend();
 }
 
 function createColorLegend() {
   // get width of legend based on width of window
-  var legendWidth = getSVGWidth() / 3;
-  var legendHeight = 300;
+  var legendWidth = 210;
+  var legendHeight = 20;
+  var barWidth = 10;
+
+  // use color red to blue color spectrum
+  var colorSpectrum = d3.schemeRdYlBu; 
 
   var svg = d3.select('.legend-container').append('svg')
-  .attr('width', legendWidth)
-  .attr('height', legendHeight)
-  .attr('class', 'legend');
+    .attr('width', legendWidth)
+    .attr('height', legendHeight)
+    .attr('class', 'legend');
 
-  xScale = d3.scaleLinear()
-    .domain([0,1])
-    .range([0, legendWidth]);
+  // use the 11-length spectrum option and reverse so that it goes
+  // from blue to red
+  svg.selectAll('rect')
+    .data(colorSpectrum[11].reverse())
+    .enter()
+    .append('rect')
+    .attr('x', function(d, i) {
+      return i * barWidth + 50;
+    })
+    .attr('y', 0)
+    .attr('height', legendHeight)
+    .attr('width', barWidth)
+    .attr('fill', function(d) {
+      return d;
+    });
 
-   // d3.interpolateRdYlGn()
+    // create labels for legend
+    svg.append('text')
+      .attr('x', 10)
+      .attr('y', 16)
+      .attr('class', 'legend-label')
+      .text((dataset.baseTemperature + getMinTemp()).toFixed(2) + '\xB0C');
+
+    svg.append('text')
+      .attr('x',  legendWidth - 45)
+      .attr('y', 16)
+      .attr('class', 'legend-label')
+      .text((dataset.baseTemperature + getMaxTemp()).toFixed(2) + '\xB0C');
 }

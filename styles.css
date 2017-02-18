@@ -1,3 +1,37 @@
+/* Page styles */
+
+body {
+  text-align: center;
+}
+
+.header, .footer {
+  font-family: 'Lato', sans-serif;
+  font-size: 1em;
+  text-align: center;
+  background-color: #444;
+  padding: 10px;
+  color: #fff;
+}
+
+a {
+  transition: color 250ms;
+}
+
+a:link,
+a:visited {
+  color: #aaa;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #fff;  
+}
+
+/*******************/
+
+
+/* Graph Styles*/
+
 /* hide line on yAxis */
 .yAxis .domain {
   visibility: hidden;
@@ -27,3 +61,14 @@
   font-size: 1.5em;
   line-height: 1.6em;
 }
+
+.legend-label {
+  font-size: .7em;
+}
+
+.legend-container {
+  margin-top: 10px;
+  min-width: 310px;
+}
+
+/*******************/
