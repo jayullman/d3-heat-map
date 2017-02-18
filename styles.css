@@ -78,7 +78,6 @@ a:hover {
   margin: 0 auto;
 }
 
-
 .user-story-list {
   margin: 0 auto;
 }
@@ -107,6 +106,9 @@ li {
   .about-section {
     font-size: .75em;
   }
+  .about-section a:hover {
+    color: #fff;
+}
 }
 
 /*******************/
