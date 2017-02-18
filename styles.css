@@ -1,7 +1,28 @@
 /* Page styles */
 
 body {
+  font-family: 'Ubuntu', sans-serif;
   text-align: center;
+  font-size: 16px;
+}
+
+.header {
+  height: 70px;
+}
+
+h1 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.header h2 {
+  font-size: .8em;
+}
+
+h3 {
+  font-size: 1em;
+  margin-bottom: 5px;
+  text-align: left;
 }
 
 .header, .footer {
@@ -23,14 +44,79 @@ a:visited {
   text-decoration: none;
 }
 
+.about-section a:link,
+.about-section a:visited {
+  color:#fff;
+  text-decoration: none;
+}
+
+.about-section a:hover {
+  color: #000;
+}
+
 a:hover {
   color: #fff;  
+}
+
+.about-section {
+  /*max-width: 750px;*/
+  margin: 20px auto 0 auto;
+  padding: 10px;
+  text-align: center;
+  background-color: #d7d7d7;
+}
+
+.about-section p {
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto 10px auto;
+  padding: 10px 20px;
+}
+
+.list-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+
+.user-story-list {
+  margin: 0 auto;
+}
+
+li {
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.footer p {
+  font-size: .8em;
+}
+
+.tagline {
+  margin-bottom: 10px;
+}
+
+/* For smaller screens */
+@media (max-width: 380px) {
+  h1 {
+    font-size: 1em;
+  }
+  .header {
+    height: 50px; 
+  }
+  .about-section {
+    font-size: .75em;
+  }
 }
 
 /*******************/
 
 
 /* Graph Styles*/
+
+.graph-title {
+  font-size: 1.2em;
+}
 
 /* hide line on yAxis */
 .yAxis .domain {

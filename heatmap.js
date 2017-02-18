@@ -150,7 +150,7 @@ function createMap() {
   // add graph title
   svg.append('text')
     .attr('x', svgWidth / 2 )
-    .attr('y', 20)
+    .attr('y', 25)
     .attr('class', 'graph-title')
     .style('text-anchor', 'middle')
     .text('Global Land-Surface Temperature');
