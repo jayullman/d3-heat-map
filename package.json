@@ -1,0 +1,23 @@
+{
+  "name": "d3-heat-map",
+  "version": "1.0.0",
+  "description": "Utilized the d3 chromatic scale plug in, which takes a number [0,1] and returns a color value based on the selected chromatic scale. I created a d3 scale with a domain of the temperature and a range of [0,1] for use with the chromatic scale",
+  "main": "heatmap.js",
+  "dependencies": {
+    "lite-server": "^2.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libeja/d3-heat-map.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/libeja/d3-heat-map/issues"
+  },
+  "homepage": "https://github.com/libeja/d3-heat-map#readme"
+}
