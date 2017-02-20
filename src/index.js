@@ -3,8 +3,11 @@ import axios from 'axios';
 // import css styles
 import 'normalize.css';
 import './styles.css';
+// import '../node_modules/font-awesome/css/font-awesome.css';
 
-import '../node_modules/font-awesome/css/font-awesome.css';
+// import d3 library and chromatic scale plugin
+import * as d3 from 'd3';
+import * as d3Chromatic from 'd3-scale-chromatic';
 
 var dataset = [];
 
@@ -21,7 +24,7 @@ axios.get('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/m
   });
 
 function getSVGWidth() {
-  var width = window.innerWidth * .9;
+  var width = window.innerWidth * 0.9;
   // create max and min-widths
   if (width < 310) {
       width = 310;
@@ -55,24 +58,24 @@ function mouseOverHandler(d) {
   var tooltipWidth = 150;
 
   d3.select('.tooltip')
-    .attr('style', 'left: ' + (d3.event.pageX - (tooltipWidth / 2))
-      + 'px; top:  ' + (d3.event.pageY - tooltipHeight - 30) + 'px;' 
-      + 'height: ' + tooltipHeight + 'px; width: ' + tooltipWidth + 'px;')
+    .attr('style', 'left: ' + (d3.event.pageX - (tooltipWidth / 2)) +
+      'px; top:  ' + (d3.event.pageY - tooltipHeight - 30) + 'px;' +
+      'height: ' + tooltipHeight + 'px; width: ' + tooltipWidth + 'px;')
     .classed('show-tooltip', true);
   
   // tooltip info goes here
   
   d3.select('.tooltip-info')
     .html(
-      MONTHS[d.month-1] + ', ' + d.year + '<br>' 
-      + 'Temp: ' + (dataset.baseTemperature + d.variance).toFixed(2) + '&deg;C' + '<br>'
-      + 'Variance: ' + d.variance.toFixed(2) + '&deg;C'
+      MONTHS[d.month-1] + ', ' + d.year + '<br>' +
+        'Temp: ' + (dataset.baseTemperature + d.variance).toFixed(2) + '&deg;C' + '<br>' +
+        'Variance: ' + d.variance.toFixed(2) + '&deg;C'
     );
 }
 
 // this function will return a color based on passed in temp value
 function getColorFromTemp(temp, scale) {
-  var color = (d3.interpolateRdYlBu(scale(temp)));
+  var color = (d3Chromatic.interpolateRdYlBu(scale(temp)));
 
   return color;
 }
@@ -101,7 +104,7 @@ function createMap() {
   // create color scale for use with the d3 chromatic scale plugin
   var colorScale = d3.scaleLinear()
   .domain([getMinTemp(), getMaxTemp()])
-  .range([1,0])
+  .range([1,0]);
 
   // create graph and append to div
   var svg = d3.select('.graph-container').append('svg')
@@ -212,7 +215,7 @@ function createColorLegend() {
   var barWidth = 10;
 
   // use color red to blue color spectrum
-  var colorSpectrum = d3.schemeRdYlBu; 
+  var colorSpectrum = d3Chromatic.schemeRdYlBu; 
 
   var svg = d3.select('.legend-container').append('svg')
     .attr('width', legendWidth)
