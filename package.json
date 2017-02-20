@@ -6,9 +6,12 @@
   "dependencies": {
     "lite-server": "^2.2.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "webpack": "^2.2.1"
+  },
   "scripts": {
-    "dev": "lite-server"
+    "dev": "lite-server",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
