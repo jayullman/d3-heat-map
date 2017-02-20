@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>D3.js Heat Map</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<link href="styles.css" rel="stylesheet"></head>
+<body>
+  <div class="header">
+    <h1>D3.js Heat Map</h1>
+    <h2>
+      A
+      <a href="https://www.freecodecamp.com" target="_blank">
+        freeCodeCamp<i class="fa fa-free-code-camp" aria-hidden="true"></i> 
+      </a>
+      Project</h2>
+  </div>
+
+  <div class="graph-container"></div>
+  <div class="legend-container"></div>
+
+  <div class="about-section">
+    
+    <p>
+      This app makes an AJAX request for JSON data containing the global land-surface temperature from
+      1753 - 2015. Temperatures are in Celsius. Variance is relative to 1951-1980 average.
+      Estimated Jan 1951-Dec 1980 absolute temperature &deg;C: 8.66 +/- 0.07.
+    </p>
+    <p>
+      The <a href="https://d3js.org/" target="_blank">D3.js</a> data visualization library was used to bind the data to svg elements.
+      The <a href="https://github.com/d3/d3-scale-chromatic" target="_blank">chromatic&#8209;scale&nbsp;module</a> was also utilized in order to render a range of colors based on a domain
+      of temperatures.
+    </p>
+    <div class="list-container">
+      <h3>User Story Requirements:</h3>
+      <ol class="user-story-list">
+        <li>I can view a heat map with data represented both on the Y and X axis</li>
+        <li>Each cell is colored based its relationship to other data</li>
+        <li>I can mouse over a cell in the heat map to get more exact information</li>
+      </ol>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="tagline">Created by Jay</div>
+    <a class="github-icon" target="_blank" href="https://github.com/libeja">
+      <i class="fa fa-github-square fa-3x" aria-hidden="true"></i>
+    </a>
+    <p>View this project's source code <a href="https://github.com/libeja/d3-heat-map" target="_blank">here</a></p>
+  </div>  
+<script type="text/javascript" src="bundle.js"></script></body>
+</html>
